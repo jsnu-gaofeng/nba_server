@@ -1,20 +1,19 @@
 const bcrypt = require("bcryptjs");
 const connection = require("../app/database");
 class functionServer {
-  async moment(user_id, content) {
+  async insert(user_id, content) {
     //将user存储到数据库中
     console.log(user_id, content);
     const sql = "insert into moments (user_id,content) values (?,?)";
-
     const result = await connection.execute(sql, [user_id, content]);
-    console.log("_________");
     return result;
   }
 
-  async searchMoment(id) {
-    console.log("111");
-    const sql = "select * from moments where user_id = ?";
-    const [result] = await connection.execute(sql, [id]);
+  async searchMoment(contentId) {
+    const sql = `select m.id id,m.content content,m.createAt createTime,
+    json_object('id',u.id,'name',u.username) user from moments m 
+    left join users u on m.user_id=u.id where m.id = ?`;
+    const [result] = await connection.execute(sql, [contentId]);
     return result;
   }
   async searchList(offset, size) {
@@ -39,7 +38,8 @@ class functionServer {
   async deleteMoment(momentId) {
     const statement = `delete from moments where id = ?`;
     const [result] = await connection.execute(statement, [momentId]);
-
+    console.log('`````',result);
+    
     return result;
   }
 }

@@ -26,7 +26,6 @@ const verifyUser = async (ctx, next) => {
 
   await next();
 };
-
 const verifyLogin = async (ctx, next) => {
   const { username, password } = ctx.request.body;
 
@@ -73,23 +72,22 @@ const verifyLogin = async (ctx, next) => {
       return ctx.app.emit("error", error, ctx);
     });
 };
-
 const verifyAuth = async (ctx, next) => {
   console.log("验证授权的middleware");
-  // console.log(ctx.req);
-
   const authorization = ctx.headers.authorization;
 
+  if (!authorization) {
+    ctx.assert(ctx.state.user, 401, "无效的token");
+  }
   const token = authorization.replace("Bearer ", "");
-
   try {
     const result = jwt.verify(token, PUBLIC_KEY, {
       algorithms: ["RS256"],
     });
-
     ctx.state.user = result;
     await next();
   } catch (error) {
+    //错误处理方式
     ctx.assert(ctx.state.user, 401, "token错误~~~");
   }
 };
@@ -97,17 +95,14 @@ const verifyPermission = async (ctx, next) => {
   console.log("验证修改动态的权限的middleware");
   const [Keys] = Object.keys(ctx.params);
   const tableName = Keys.replace("Id", "s");
-
   const ID = ctx.params[Keys];
   const { id } = ctx.state.user;
   try {
     const isPermission = await authVerify.moment(tableName, ID, id);
-
     if (!isPermission) {
-      const error = new Error("不具备该动态的修改权限！！！");
+      const error = new Error("操作失败！！！");
       return ctx.app.emit("error", error, ctx);
     }
-
     await next();
   } catch (error) {
     ctx.assert(ctx.state.user, 401, "验证权限时出现的错误~~~");

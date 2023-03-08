@@ -5,7 +5,7 @@ const {
   verifyPermission,
 } = require("../middleware/user.middleware");
 const FunctionRouter = new Router({ prefix: "/comment" });
-
+//1.发表
 FunctionRouter.post("/", verifyAuth, commentHandle.create);
 FunctionRouter.post("/reply", verifyAuth, commentHandle.reply);
 FunctionRouter.patch(

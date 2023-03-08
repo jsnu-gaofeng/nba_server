@@ -1,26 +1,25 @@
 const bcrypt = require("bcryptjs");
-const functionServer = require("../service/function.server");
+const functionServer = require("../service/moment.server");
 const labelServer = require("../service/label.server");
 
 class FunctionHandle {
-  async moment(ctx, next) {
+  async create(ctx, next) {
     //1.获取数据（user_id,content）
     const user_id = ctx.state.user.id;
+    const user_name = ctx.state.user.username;
     const content = ctx.request.body.content;
     //2.将数据插入数据库
-    console.log("准备");
-
-    const result = await functionServer.moment(user_id, content);
-    console.log("@@@", result);
-
-    ctx.body = result;
+    const result = await functionServer.insert(user_id, content);
+    if (result[0].affectedRows === 1) {
+      ctx.body = `用户${user_name}动态发表成功啦！！！`;
+    }
   }
   async detail(ctx, next) {
     //1.获取客户端传过来的ID
     const momentId = ctx.params.momentId;
     //2.根据动态的Id查询动态
     const result = await functionServer.searchMoment(momentId);
-    ctx.body = result;
+    ctx.body = result[0];
   }
   async list(ctx, next) {
     //1.获取客户端传过来的ID
@@ -34,14 +33,12 @@ class FunctionHandle {
     const { momentId } = ctx.params;
     const { content } = ctx.request.body;
     const result = await functionServer.updataMoment(momentId, content);
-
     ctx.body = result;
   }
   async delete(ctx, next) {
     //1.获取客户端传过来的ID
     const { momentId } = ctx.params;
     const result = await functionServer.deleteMoment(momentId);
-
     ctx.body = result;
   }
   async addLabel(ctx, next) {

@@ -1,5 +1,5 @@
 const Router = require("koa-router");
-const functionHandle = require("../router_handdle/function.handle");
+const momentHandle = require("../router_handdle/moment.handle");
 const {
   verifyAuth,
   verifyPermission,
@@ -7,24 +7,21 @@ const {
 const { verufyExitsLabel } = require("../middleware/label.middleware");
 
 const FunctionRouter = new Router({ prefix: "/my" });
-
-FunctionRouter.post("/moment", verifyAuth, functionHandle.moment);
-
-FunctionRouter.get("/moment/:momentId", functionHandle.detail);
-
-FunctionRouter.get("/moment", functionHandle.list);
+FunctionRouter.post("/moment", verifyAuth, momentHandle.create);
+FunctionRouter.get("/moment/:momentId", momentHandle.detail);
+FunctionRouter.get("/moment", momentHandle.list);
 //1.用户必须登录 2.用户具有的权限
 FunctionRouter.patch(
   "/moment/:momentId",
   verifyAuth,
   verifyPermission,
-  functionHandle.updata
+  momentHandle.updata
 );
 FunctionRouter.delete(
   "/moment/:momentId",
   verifyAuth,
   verifyPermission,
-  functionHandle.delete
+  momentHandle.delete
 );
 //给动态添加标签
 FunctionRouter.post(
@@ -32,6 +29,6 @@ FunctionRouter.post(
   verifyAuth,
   verifyPermission,
   verufyExitsLabel,
-  functionHandle.addLabel
+  momentHandle.addLabel
 );
 module.exports = FunctionRouter;
