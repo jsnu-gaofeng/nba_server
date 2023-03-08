@@ -75,7 +75,6 @@ const verifyLogin = async (ctx, next) => {
 const verifyAuth = async (ctx, next) => {
   console.log("验证授权的middleware");
   const authorization = ctx.headers.authorization;
-
   if (!authorization) {
     ctx.assert(ctx.state.user, 401, "无效的token");
   }

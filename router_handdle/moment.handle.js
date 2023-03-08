@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 const functionServer = require("../service/moment.server");
 const labelServer = require("../service/label.server");
-
+const fs = require('fs')
 class FunctionHandle {
   async create(ctx, next) {
     //1.获取数据（user_id,content）
@@ -45,19 +45,26 @@ class FunctionHandle {
     const { labels } = ctx.request.body;
     const { momentId } = ctx.params;
     console.log(labels, momentId);
-    //给动态添加上独影的标签，需要注意 动态可能已经有标签了，要避免重复
+
+    //给动态添加上独有的标签，需要注意 动态可能已经有标签了，要避免重复
     for (let label of labels) {
       const isInsert = await labelServer.isInsertLabel(momentId, label);
-      console.log(isInsert);
-
       if (!isInsert) {
         const result = await labelServer.addLabel(momentId, label);
         ctx.body = "标签和动态对应成功~~~";
       }
     }
+  }
+  async picInfo(ctx, next) {
+    const { picname } = ctx.params;
+    const result = await functionServer.getPictureInfo(picname)
+    const pics = fs.createReadStream(
+      `./files/picture/${result[result.length - 1].filename}`
+    );
+    //想要直接展示必须这样设置
+    ctx.response.set("content-type", result[result.length - 1].mimetype);
+    ctx.body = pics;
 
-    const result = await commentServer.addLabel(labels, momentId);
-    ctx.body = result;
   }
 }
 

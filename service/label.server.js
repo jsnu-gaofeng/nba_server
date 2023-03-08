@@ -25,8 +25,6 @@ class labelServer {
     const statement =
       "insert into moments_labels (moment_id,label) values (?,?)";
     const [result] = await connection.execute(statement, [momentId, label]);
-    console.log("666");
-
     return result;
   }
   async getLabels(limit, offset) {

@@ -20,7 +20,9 @@ FunctionRouter.delete(
   verifyPermission,
   commentHandle.delete
 );
-FunctionRouter.get("/list", commentHandle.list);
+//查询多个东台市，显示评论的个数
+//查询单个动态时，显示评论的列表
+FunctionRouter.post("/list", commentHandle.list);
 
 
 module.exports = FunctionRouter;

@@ -23,6 +23,7 @@ FunctionRouter.delete(
   verifyPermission,
   momentHandle.delete
 );
+
 //给动态添加标签
 FunctionRouter.post(
   "/moment/:momentId/labels",
@@ -31,4 +32,6 @@ FunctionRouter.post(
   verufyExitsLabel,
   momentHandle.addLabel
 );
+FunctionRouter.get("/moment/images/:picname", momentHandle.picInfo);
+
 module.exports = FunctionRouter;

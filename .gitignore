@@ -7,6 +7,7 @@ node_modules/
 # 忽略.env文件
 .env
  
+files/
 # 忽略IDE的配置文件
 .idea/
 .vscode/

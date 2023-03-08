@@ -29,8 +29,8 @@ class userHandle {
     const pics = fs.createReadStream(
       `./files/avatar/${result[result.length - 1].filename}`
     );
+    //想要直接展示必须这样设置
     ctx.response.set("content-type", result[result.length - 1].mimetype);
-
     ctx.body = pics;
   }
 }

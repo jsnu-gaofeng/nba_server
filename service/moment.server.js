@@ -8,11 +8,13 @@ class functionServer {
     const result = await connection.execute(sql, [user_id, content]);
     return result;
   }
-
   async searchMoment(contentId) {
+    console.log('!!!!!!!!');
     const sql = `select m.id id,m.content content,m.createAt createTime,
-    json_object('id',u.id,'name',u.username) user from moments m 
-    left join users u on m.user_id=u.id where m.id = ?`;
+    json_object('id',u.id,'name',u.username,'avatar',u.avatar) user,
+    (SELECT JSON_ARRAYAGG(CONCAT('http://localhost:3688/my/moment/images/',pictures.filename))
+    from pictures where m.id = pictures.moment_id) images
+    from moments m left join users u on m.user_id=u.id where m.id = ?`;
     const [result] = await connection.execute(sql, [contentId]);
     return result;
   }
@@ -38,8 +40,11 @@ class functionServer {
   async deleteMoment(momentId) {
     const statement = `delete from moments where id = ?`;
     const [result] = await connection.execute(statement, [momentId]);
-    console.log('`````',result);
-    
+    return result;
+  }
+  async getPictureInfo(picname) {
+    const sql = "select * from pictures where filename = ?";
+    const [result] = await connection.execute(sql, [picname]);
     return result;
   }
 }

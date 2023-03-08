@@ -21,6 +21,7 @@ class fileServer {
       userId,
       moment_id,
     ]);
+    return result
   }
 }
 module.exports = new fileServer();

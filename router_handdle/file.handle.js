@@ -12,11 +12,12 @@ class fileHandle {
     const avatarInfo = await userServer.getAvatarByuserId(id);
     const pic_url = `${APP_HOST}:${APP_PORT}/api/avatar/${id}`;
     const isUpdata = await userServer.updateAvatarUrlById(id, pic_url);
-    ctx.body = "用户上床头像成功";
+    ctx.body = "用户上传头像成功";
   }
   async upload_picture(ctx, next) {
     //1.获取图像相关信息
     const files = ctx.req.files;
+    console.log("图片上传", files);
     const { id } = ctx.state.user;
     const { momentId } = ctx.query;
     //2.将图像数据信息保存到数据库

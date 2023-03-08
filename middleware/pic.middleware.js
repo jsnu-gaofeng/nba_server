@@ -5,30 +5,21 @@ const avatarUpload = Multer({
   dest: "./files/avatar",
 });
 const avatarHandler = avatarUpload.single("avatar");
-
 const pictureUpload = Multer({
   dest: "./files/picture",
 });
 const pictureHandler = pictureUpload.array("picture", 9);
-// const pictureHandler = pictureUpload.fileds([{name:"picture",maxCount:5}]);
+// const pictureHandler = pictureUpload.fields([{ name: "picture", maxCount: 3 }]);
 //这里缺一个next() 需要解决一下！！！！！！！！！！！！！！ 回：第三方模块有
-
 const pictureResiza = async (ctx, next) => {
-  console.log("88888888");
-
   const files = ctx.req.files;
   for (let file of files) {
-    console.log(file);
-    
     const destPath = path.join(file.destination, file.filename);
-    console.log(destPath);
-
     jimp.read(file.path).then((image) => {
       image.resize(1280, jimp.AUTO).write(`${destPath}-large`);
     });
     //对上传的图像进行处理
   }
-
   await next();
 };
 module.exports = { avatarHandler, pictureHandler, pictureResiza };

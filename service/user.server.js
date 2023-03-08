@@ -23,7 +23,6 @@ class userServer {
   async chaxun(username) {
     const sql = "select * from users where username = ?";
     const [result] = await connection.execute(sql, [username]);
-    console.log('*******',result);
     return result;
   }
 

@@ -9,8 +9,6 @@ class commentServer {
   }
   async reply(momentId, content, id, comment_id) {
     //将user存储到数据库中
-    console.log(momentId, content, id, comment_id);
-
     const sql =
       "insert into comments (content,moment_id,user_id,comment_id) values (?,?,?,?)";
     const [result] = await connection.execute(sql, [
@@ -22,10 +20,7 @@ class commentServer {
     return result;
   }
   async updata(commentId, content) {
-    //将user存储到数据库中
     const statement = `update comments set content = ? where id = ?`;
-    console.log(commentId, content);
-
     const [result] = await connection.execute(statement, [content, commentId]);
     return result;
   }
