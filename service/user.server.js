@@ -1,5 +1,5 @@
 // const bcrypt = require("bcryptjs");
-const crypto = require('crypto')
+const crypto = require("crypto");
 const connection = require("../app/database");
 class userServer {
   async Insert(password1, username) {
@@ -35,6 +35,11 @@ class userServer {
   async updateAvatarUrlById(userId, pic_url) {
     const statement = `update users set avatar = ? where id = ?`;
     const [result] = await connection.execute(statement, [pic_url, userId]);
+    return result;
+  }
+  async getUserInfoById(userId) {
+    const sql = "select * from role where user_id = ?";
+    const [result] = await connection.execute(sql, [userId]);
     return result;
   }
 }

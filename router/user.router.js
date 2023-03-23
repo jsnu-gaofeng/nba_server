@@ -16,4 +16,6 @@ userRouter.post("/reguser", verifyUser, userHandle.create);
 userRouter.post("/login", verifyLogin, userHandle.login);
 
 userRouter.post("/avatar/:userId", verifyAuth, userHandle.avatarInfo);
+
+userRouter.post("/users/:userId", verifyAuth, userHandle.requestUserInfoById);
 module.exports = userRouter;

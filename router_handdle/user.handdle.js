@@ -1,5 +1,5 @@
 const userServer = require("../service/user.server");
-const md5password = require('../utilis/Md5password')
+const md5password = require("../utilis/Md5password");
 const fs = require("fs");
 class userHandle {
   async create(ctx, next) {
@@ -8,7 +8,7 @@ class userHandle {
     const { username, password } = user;
 
     // let password1 = bcrypt.hashSync(password, 10);
-    const password1 = md5password(password)
+    const password1 = md5password(password);
     const result = await userServer.Insert(password1, username);
 
     ctx.body = {
@@ -19,7 +19,7 @@ class userHandle {
 
   async login(ctx, next) {
     //没有让到这里
-    console.log('888888');
+    console.log("888888");
     ctx.body = "授权成功";
   }
   async avatarInfo(ctx, next) {
@@ -32,6 +32,14 @@ class userHandle {
     //想要直接展示必须这样设置
     ctx.response.set("content-type", result[result.length - 1].mimetype);
     ctx.body = pics;
+  }
+  async requestUserInfoById(ctx, next) {
+    const { userId } = ctx.params;
+    const result = await userServer.getUserInfoById(userId);
+    ctx.body = {
+      data: result,
+      status: 200,
+    };
   }
 }
 
